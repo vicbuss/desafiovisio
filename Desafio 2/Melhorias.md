@@ -63,3 +63,15 @@ if (hourInitialAndFinalIsQuery) {
 
  - Escrever casos de teste que devem retornar erros. E.g.: consulta de uma câmera-dia que não existe; consulta de uma câmera-dia com valores errados ou atributos inexistentes; inclusão de uma câmera-dia com atributos faltantes/valores de tipo incorreto/ Id duplicada; atualização de uma câmera-dia com atributos inválidos, etc.  
 
+## Opacidade do modelo de dados:
+
+### Problema: 
+1. Com e exceção do arquivo data na pasta de testes, não é possível visualizar com clareza a estrutura de dados manipulada pelas rotas da API. Ela pode ser parcialmente extrapolada de mocks/validator, mas apenas de modo incompleto.
+2. Pelo arquivo de routes, por exemplo, é impossível saber o tipo de body necessário para que uma requisição POST crie um objeto-evento válido e apropriado. Para tanto, seria necessário consultar um banco de dados já implementado, consultar um colega, ou percorrer o arquivo-fonte da API à procura de pistas do modelo.
+3. A função `createEventObject()` utilizada na rota POST oculta a estrutura do banco de dados, presumindo que o autor da requisição deva conhecê-la de antemão e incluí-la no corpo da request. 
+
+### Melhorias sugeridas:
+- Ajustar o código da rota POST para tornar explícito como o algoritmo vai tomar os parâmetros do body da requisição e transformá-lo em um objeto válido. 
+Isso pode ser feito aproveitando a função de validator `createEventObject()`, onde a lógica do modelo é explícita,e usá-la no lugar de `createEventoObject()`, que não possui essa qualidade.
+- Tornar o modelo transparente no código-fonte. Uma maneira de fazer isso é usando o *mongoose* e criando uma pasta *Model* com um *Schema* que define e explicita o modelo de dados, além prover uma estrutura conveniente para definir parâmetros de validação e mensagens de erro.     
+
